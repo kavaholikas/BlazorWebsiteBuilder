@@ -1,0 +1,37 @@
+<div class="fg-add-element">
+    <h5>Add new Attribute</h5>
+    <div class="fg-input-container">
+        <label class="fg-label-100">Name: </label>
+        <input type="text" placeholder="Name" @bind="Key" class="fg-input"/>
+    </div>
+    <div class="fg-input-container">
+        <label class="fg-label-100">Value: </label>
+        <input type="text" placeholder="Value" @bind="Value" class="fg-input"/>
+    </div>
+    <div class="fg-input-container">
+        <label class="fg-label-120">Is Standalone:</label>
+        <input type="checkbox" @bind="IsStandalone" />
+    </div>
+    <button @onclick="Add" class="fg-button">Add</button>
+</div>
+
+@code {
+    [Parameter]
+    public Action<string, string, bool> AddAttribute { get; set; }
+    public string Key { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
+    public bool IsStandalone { get; set; } = false;
+
+    public void Add()
+    {
+        if ((IsStandalone && !string.IsNullOrWhiteSpace(Key)) ||
+            (!string.IsNullOrWhiteSpace(Key) && !string.IsNullOrWhiteSpace(Value)))
+        {
+            AddAttribute?.Invoke(Key, Value, IsStandalone);
+
+            Key = string.Empty;
+            Value = string.Empty;
+            IsStandalone = false;
+        }
+    }
+}

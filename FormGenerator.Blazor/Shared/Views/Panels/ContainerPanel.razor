@@ -1,0 +1,53 @@
+@inject Generator Generator
+
+<ul class="max-height-200">
+    @foreach (Node node in Root.ChildNodes)
+    {
+        <ElementControl Root="node" RemoveNode="RemoveNode" MoveNode="MoveNode" SelectNode="SelectNode"/>
+    }
+</ul>
+
+<AddElementControl AddNode="AddNode"/>
+
+@code {
+    [Parameter]
+    public ContainerNode Root { get; set; }
+
+    [Parameter]
+    public Action<Node> SelectNode { get; set; }
+
+    [Parameter]
+    public Action GenerateHTML { get; set; }
+
+    public void AddNode(NodeType type, string TagName, string TextValue, PremadeNodeGenerators? png)
+    {
+        if (string.IsNullOrWhiteSpace(TagName) && type != NodeType.PremadeNode)
+        {
+            return;
+        }
+
+        Node node = type switch 
+        {
+            NodeType.ContainerNode => new ContainerNode(TagName),
+            NodeType.TextNode => new TextNode(TagName, TextValue),
+            NodeType.SelfClosingNode => new SelfClosingNode(TagName),
+            NodeType.PremadeNode => Generator.GetPremadeNode(png ?? PremadeNodeGenerators.LabelInputDiv),
+            _ => new ContainerNode(TagName)
+        };
+
+        Root.AddNode(node);
+        GenerateHTML?.Invoke();
+    }
+
+    public void RemoveNode(Guid id)
+    {
+        Root.RemoveNode(id);
+        GenerateHTML?.Invoke();
+    }
+
+    public void MoveNode (Guid id, bool up)
+    {
+        Root.MoveNode(id, up);
+        GenerateHTML?.Invoke();
+    }
+}

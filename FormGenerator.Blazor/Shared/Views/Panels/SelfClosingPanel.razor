@@ -1,0 +1,36 @@
+<div class="fg-list-item">
+    <div class="fg-input-container">
+        <label class="fg-label-100">Name: </label>
+        <input type="text" placeholder="Name" @bind=@Name class="fg-input"/>
+    </div>
+    <button @onclick="Update" class="fg-button">Update</button>
+</div>
+
+@code {
+    [Parameter]
+    public SelfClosingNode Root { get; set; }
+
+    [Parameter]
+    public Action GenerateHTML { get; set; }
+
+    public string Name { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        Name = Root.Name;
+    }
+
+    public void Update()
+    {
+        if (string.IsNullOrEmpty(Name))
+        {
+            return;
+        }
+
+        Root.SetName(Name);
+
+        GenerateHTML?.Invoke();
+    }
+}
+

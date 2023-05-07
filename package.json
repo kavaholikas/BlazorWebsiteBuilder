@@ -1,0 +1,10 @@
+{
+    "name": "form-generator",
+    "private": true,
+    "version": "1.0.0",
+    "scripts": {
+        "start": "dotnet run --project ./FormGenerator.Blazor/FormGenerator.Blazor.csproj",
+        "watch": "dotnet watch run --project ./FormGenerator.Blazor/FormGenerator.Blazor.csproj",
+        "test": "dotnet test"
+    }
+}

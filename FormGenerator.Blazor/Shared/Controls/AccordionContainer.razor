@@ -1,0 +1,22 @@
+<h2 class="accordion @HeaderClass" @onclick=@ToggleAccordion>@Header</h2>
+<div class="@PanelClass">
+    @Panel
+</div>
+
+@code {
+    [Parameter]
+    public string Header { get; set; } = "Accordion Header";
+
+    [Parameter]
+    public RenderFragment? Panel { get; set; }
+
+    private bool _show = false;
+
+    public string HeaderClass => _show? "active": "";
+    public string PanelClass => _show? "panel-visable": "panel-hidden";
+
+    public void ToggleAccordion()
+    {
+        _show = !_show;
+    }
+}

@@ -1,0 +1,84 @@
+<PanelContainer Header=@StyleFor>
+    <Panel>
+        <StylePanel Root="Root" GenerateHTML="GenerateHTML"/>
+    </Panel>
+</PanelContainer>
+
+<PanelContainer Header="Style Builder">
+    <Panel>
+        <h5>Styles</h5>
+        <StyleListPanel Styles="CssGenerator.Styles" AddStyle="AddStyle" RemoveStyle="RemoveStyle" SelectStyle="SelectStyle"/>
+
+        @if (_selectedStyle is not null)
+        {
+            <h5>Style Rules - @_selectedStyle.Name</h5>
+            <ul class="max-height-200">
+                @foreach (Rule rule in _selectedStyle.Rules)
+                {
+                    <StyleRuleControl Rule="rule" UpdateRule="UpdateRule" RemoveRule="RemoveRule" MoveRule="MoveRule"/>
+                }
+
+            </ul>
+            <AddStyleRuleControl AddRule="AddRule"/>
+        }
+    </Panel>
+</PanelContainer>
+
+@code {
+    [Parameter]
+    public Node Root { get; set; }
+
+    [Parameter]
+    public CssGenerator CssGenerator { get; set; }
+
+    [Parameter]
+    public Action GenerateHTML { get; set; }
+
+    public string NewStyleName { get; set; } = string.Empty;
+
+    private Style? _selectedStyle;
+
+    public string StyleFor => $"Style for - {Root.GetPath()}";
+
+    public void AddStyle(string styleName)
+    {
+        CssGenerator.AddStyle(styleName);
+        GenerateHTML?.Invoke();
+    }
+
+    public void RemoveStyle(Style style)
+    {
+        CssGenerator.RemoveStyle(style);
+        GenerateHTML?.Invoke();
+    }
+
+    public void SelectStyle(Style style)
+    {
+        _selectedStyle = style;
+        GenerateHTML?.Invoke();
+    }
+
+    public void AddRule(string property, string value)
+    {
+        _selectedStyle?.AddRule(property, value);
+        GenerateHTML?.Invoke();
+    }
+
+    public void UpdateRule(Guid id, string property, string value)
+    {
+        _selectedStyle?.UpdateRule(id, property, value);
+        GenerateHTML?.Invoke();
+    }
+
+    public void RemoveRule(Guid id)
+    {
+        _selectedStyle?.RemoveRule(id);
+        GenerateHTML?.Invoke();
+    }
+
+    public void MoveRule(Guid id, bool up)
+    {
+        _selectedStyle?.MoveRule(id, up);
+        GenerateHTML?.Invoke();
+    }
+}

@@ -1,0 +1,14 @@
+h3 {
+    border-bottom: 2px solid black;
+    padding-bottom: 0.25em;
+}
+
+.main-panel {
+    border: 1px solid black;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+.child-panel {
+    margin: 0.25em;
+}

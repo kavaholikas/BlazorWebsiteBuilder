@@ -1,0 +1,24 @@
+<li class="fg-list-item">
+    <label class="type">@Root.Type</label>
+    <label class="name">@Root.Name</label>
+    <span>
+        <button class="fg-button" @onclick=@(() => SelectNode?.Invoke(Root))>Edit</button>
+        <button class="fg-button" @onclick=@(() => RemoveNode?.Invoke(Root.Id))>Remove</button>
+        <button class="fg-button" @onclick=@(() => MoveNode?.Invoke(Root.Id, true))>&uarr;</button>
+        <button class="fg-button" @onclick=@(() => MoveNode?.Invoke(Root.Id, false))>&darr;</button>
+    </span>
+</li>
+
+@code {
+    [Parameter]
+    public Node Root { get; set; }
+
+    [Parameter]
+    public Action<Guid> RemoveNode { get; set; }
+
+    [Parameter]
+    public Action<Guid, bool> MoveNode { get; set; }
+
+    [Parameter]
+    public Action<Node> SelectNode { get; set; } 
+}

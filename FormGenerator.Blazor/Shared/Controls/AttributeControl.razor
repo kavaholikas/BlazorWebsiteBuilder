@@ -1,0 +1,56 @@
+<li class="fg-list-item fg-flex-row">
+
+    <div>
+        <div class="fg-input-container">
+            <label class="fg-label-100">Name: </label>
+            <input type="text" placeholder="Name" @bind=@Key class="fg-input"/>
+        </div>
+        <div class="fg-input-container">
+            <label class="fg-label-100">Value: </label>
+            <input type="text" placeholder="Value" @bind=@Value class="fg-input"/>
+        </div>
+        <div class="fg-input-container">
+            <label class="fg-label-120">Is Standalone:</label>
+            <input type="checkbox" @bind=@IsStandalone />
+        </div>
+    </div>
+
+    <div>
+        <div class="fg-attribute-button-container">
+            <button @onclick=@(() => UpdateAttribute?.Invoke(Attribute.Id, Key, Value, IsStandalone)) class="fg-button">Update</button>
+            <button @onclick=@(() => MoveAttribute?.Invoke(Attribute.Id, true)) class="fg-button">&uarr;</button>
+        </div>
+        <div class="fg-attribute-button-container">
+            <button @onclick=@(() => RemoveAttribute?.Invoke(Key)) class="fg-button">Remove</button>
+            <button @onclick=@(() => MoveAttribute?.Invoke(Attribute.Id, false)) class="fg-button">&darr;</button>
+        </div>
+    </div>
+</li>
+
+@code {
+    [Parameter]
+    public FormGenerator.HtmlGenerator.Attribute Attribute { get; set; }
+    
+    [Parameter]
+    public Action<string> RemoveAttribute { get; set; }
+
+    [Parameter]
+    public Action<Guid, string, string, bool> UpdateAttribute { get; set; }
+
+    [Parameter]
+    public Action<Guid, bool> MoveAttribute { get; set; }
+
+    public string Key { get; set; }
+    public string Value { get; set; }
+
+    public bool IsStandalone { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        Key = Attribute.Key;
+        Value = Attribute.Value;
+        IsStandalone = Attribute.IsStandalone;
+    }
+}
+

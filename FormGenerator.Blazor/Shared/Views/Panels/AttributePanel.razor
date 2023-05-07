@@ -1,0 +1,51 @@
+<ul class="max-height-200">
+    @foreach (FormGenerator.HtmlGenerator.Attribute attribute in Root.Attributes)
+    {
+        <AttributeControl Attribute="attribute"
+            RemoveAttribute="RemoveAttribute"
+            UpdateAttribute="UpdateAttribute"
+            MoveAttribute="MoveAttribute"/>
+    }
+</ul>
+
+<AddAttributeControl AddAttribute="AddAttribute" />
+
+@code {
+    [Parameter]
+    public Node Root { get; set; }
+
+    [Parameter]
+    public Action GenerateHTML { get; set; }
+    
+    public void AddAttribute(string key, string value, bool isStandalone)
+    {
+        if (isStandalone)
+        {
+            Root.AddAttribute(key);
+        }
+        else
+        {
+            Root.AddAttribute(key, value);
+        }
+
+        GenerateHTML?.Invoke();
+    }
+
+    public void RemoveAttribute(string key)
+    {
+        Root.RemoveAttribute(key);
+        GenerateHTML?.Invoke();
+    }
+
+    public void UpdateAttribute(Guid id, string key, string value, bool isStandalone)
+    {
+        Root.UpdateAttribute(id, key, value, isStandalone);
+        GenerateHTML?.Invoke();
+    }
+
+    public void MoveAttribute (Guid id, bool up)
+    {
+        Root.MoveAttribute(id, up);
+        GenerateHTML?.Invoke();
+    }
+}

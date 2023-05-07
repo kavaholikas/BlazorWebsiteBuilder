@@ -1,0 +1,32 @@
+<li class="fg-list-item">
+    <div class="fg-input-container">
+        <label class="fg-label-100">Property:</label>
+        <input type="text" @bind="Property" class="fg-input"/>
+    </div>
+    <div class="fg-input-container">
+        <label class="fg-label-100">Value:</label>
+        <input type="text" @bind="Value" class="fg-input"/>
+    </div>
+    <button @onclick="Add" class="fg-button">Add</button>
+</li>
+
+@code {
+    [Parameter]
+    public Action<string, string> AddRule { get; set; }
+
+    public string Property { get; set; }
+    public string Value { get; set; }
+
+    public void Add()
+    {
+        if (string.IsNullOrEmpty(Property) || string.IsNullOrEmpty(Value))
+        {
+            return;
+        }
+
+        AddRule?.Invoke(Property, Value);
+
+        Property = string.Empty;
+        Value = string.Empty;
+    }
+}

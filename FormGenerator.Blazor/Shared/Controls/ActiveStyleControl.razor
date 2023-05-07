@@ -1,0 +1,12 @@
+<li class="fg-list-item">
+    <label>Active - @Style.Name</label>
+    <button @onclick=@(() => RemoveStyleFromActive?.Invoke(Style.Id)) class="fg-button">Remove</button>
+</li> 
+
+@code {
+    [Parameter]
+    public Style Style { get; set; }
+
+    [Parameter]
+    public Action<Guid> RemoveStyleFromActive { get; set; }
+}

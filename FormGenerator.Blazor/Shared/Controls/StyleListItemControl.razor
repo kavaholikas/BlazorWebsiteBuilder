@@ -1,0 +1,16 @@
+<li class="fg-list-item">
+    <label class="fg-label-200">@Style.Name</label>
+    <button @onclick=@(() => SelectStyle?.Invoke(Style)) class="fg-button">Edit</button>
+    <button @onclick=@(() => RemoveStyle?.Invoke(Style)) class="fg-button">Remove</button>
+</li>
+
+@code {
+    [Parameter]
+    public Style Style { get; set; }
+
+    [Parameter]
+    public Action<Style> SelectStyle { get; set; }
+
+    [Parameter]
+    public Action<Style> RemoveStyle { get; set; }
+}

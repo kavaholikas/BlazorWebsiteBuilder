@@ -1,0 +1,14 @@
+<div class="main-panel">
+    <h3>@Header</h3>
+    <div class="child-panel">
+        @Panel
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Header { get; set; } = "Header";
+
+    [Parameter]
+    public RenderFragment? Panel { get; set; }
+}

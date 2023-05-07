@@ -1,0 +1,24 @@
+<div class="fg-add-element">
+    <div class="fg-input-container">
+        <label class="fg-label-100">Name:</label>
+        <input type="text" placeholder="Style Name" @bind="NewStyleName" class="fg-input"/>
+        <button @onclick="Add" class="fg-button">Add</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Action<string> AddStyle { get; set; }
+
+    public string NewStyleName { get; set; } = string.Empty;
+
+    public void Add()
+    {
+        if (!string.IsNullOrEmpty(NewStyleName))
+        {
+            AddStyle?.Invoke(NewStyleName);
+        }
+
+        NewStyleName = string.Empty;
+    }
+}

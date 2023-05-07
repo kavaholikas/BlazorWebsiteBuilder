@@ -1,0 +1,22 @@
+<ul class="max-height-100">
+    @foreach (Style style in Styles)
+    {
+        <StyleListItemControl Style="style" SelectStyle="SelectStyle" RemoveStyle="RemoveStyle"/>
+    }
+</ul>
+
+<AddStyleListItemControl AddStyle="AddStyle"/>
+
+@code {
+    [Parameter]
+    public List<Style> Styles { get; set; }
+
+    [Parameter]
+    public Action<Style> SelectStyle { get; set; }
+
+    [Parameter]
+    public Action<string> AddStyle { get; set; }
+
+    [Parameter]
+    public Action<Style> RemoveStyle { get; set; }
+}

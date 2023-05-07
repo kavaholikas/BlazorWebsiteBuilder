@@ -1,0 +1,87 @@
+﻿@page "/"
+@inject Generator Generator
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Website Builder</PageTitle>
+<h1 class="text-center">Website Builder</h1>
+<h3 class="text-center">Current Element - @TreeNode.GetPath()</h3>
+
+<div class="row">
+    <div class="col">
+        <TreeView Root="TreeNode" SelectNode="SelectNode" GenerateHTML="GenerateHTML"/>
+    </div>
+    <div class="col">
+        <StyleBuilderView Root="TreeNode" CssGenerator="Generator.CssGenerator" GenerateHTML="GenerateHTML"/>
+    </div>
+</div>
+
+<div class="row">
+    <button @onclick="ExportHTMLplusCSS" class="fg-button">Export HTML + CSS</button>
+    <button @onclick="ExportHTML" class="fg-button">Export HTML</button>
+    <button @onclick="ExportCSS" class="fg-button">Export CSS</button>
+</div>
+
+<hr/>
+
+@HTML
+
+@code {
+    private string htmlString;
+    public MarkupString HTML => new MarkupString(htmlString);
+
+    private Node _root;
+    private Node? _selectedNode;
+
+    public Node TreeNode => _selectedNode ?? _root;
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _root = Generator.GetRoot();
+        GenerateHTML();
+    }
+
+    public void SelectNode(Node node)
+    {
+        if (node is null)
+        {
+            return;
+        }
+
+        _selectedNode = node;
+        StateHasChanged();
+    }
+
+    public void GenerateHTML()
+    {
+        htmlString = Generator.GenerateHTML();
+        StateHasChanged();
+    }
+
+    public async void ExportHTML()
+    {
+        string html = Generator.ExportHTML();
+        string fileName = "index.html";
+
+        await JSRuntime.InvokeAsync<object>("saveFile", fileName, html);
+    }
+
+    public async void ExportCSS()
+    {
+        string css = Generator.ExportCSS();
+        string fileName = "style.css";
+
+        await JSRuntime.InvokeAsync<object>("saveFile", fileName, css);
+    }
+
+    public async void ExportHTMLplusCSS()
+    {
+        string html = Generator.ExportHTMLplusCSS();
+        string fileName = "index.html";
+
+        await JSRuntime.InvokeAsync<object>("saveFile", fileName, html);
+    }
+
+}

@@ -1,0 +1,68 @@
+<div class="fg-add-element">
+    <h5>Add new Body element</h5>
+
+    <div class="fg-input-container">
+        <label class="fg-label-100">Node Type:</label>
+        <select @bind="_selectedType" class="fg-input">
+            @foreach (NodeType type in Enum.GetValues(typeof(NodeType)))
+            {
+                <option value=@type>@type</option>
+            }
+        </select>
+    </div>
+
+    @if (_selectedType == NodeType.TextNode)
+    {
+        <div class="fg-input-container">
+            <label class="fg-label-100">Tag Name:</label>
+            <input type="text" placeholder="Tag Name" @bind="TagName" class="fg-input"/>
+        </div>
+        <div class="fg-input-container">
+            <label class="fg-label-100">Text Value:</label>
+            <input type="text" placeholder="Text Value" @bind="TextValue" class="fg-input"/>
+        </div>
+    }
+    else if (_selectedType == NodeType.PremadeNode)
+    {
+        <div class="fg-input-container">
+            <label class="fg-label-100">Node:</label>
+
+            <select @bind="_png" class="fg-input">
+                @foreach (PremadeNodeGenerators generator in Enum.GetValues(typeof(PremadeNodeGenerators)))
+                {
+                    <option value=@generator>@generator</option>
+                }
+            </select>
+        </div>
+    }
+    else
+    {
+        <div class="fg-input-container">
+            <label class="fg-label-100">Tag Name:</label>
+            <input type="text" placeholder="Tag Name" @bind="TagName" class="fg-input"/>
+        </div>
+    }
+
+    <button @onclick="Add" class="fg-button">Add</button>
+</div>
+
+@code {
+    [Parameter]
+    public Action<NodeType, string, string, PremadeNodeGenerators?> AddNode { get; set; }
+    private NodeType _selectedType;
+
+    private PremadeNodeGenerators? _png;
+
+    public string TagName { get; set; } = string.Empty;
+    public string TextValue { get; set; } = string.Empty;
+
+    public void Add()
+    {
+        if (!string.IsNullOrEmpty(TagName) || _selectedType == NodeType.PremadeNode)
+        {
+            AddNode?.Invoke(_selectedType, TagName, TextValue, _png);
+            TagName = string.Empty;
+            TextValue = string.Empty;
+        }
+    }
+}

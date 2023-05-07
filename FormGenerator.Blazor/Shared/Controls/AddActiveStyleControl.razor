@@ -1,0 +1,28 @@
+<div class="fg-add-element">
+    <select @bind="_selectedStyle" class="fg-input">
+        @foreach (Style style in CssGenerator.Styles)
+        {
+            <option value="@style.Id">@style.Name</option>
+        }
+    </select>
+    <button @onclick="Add" class="fg-button">Add</button>
+</div>
+
+@code {
+    [Parameter]
+    public CssGenerator CssGenerator { get; set; }
+
+    [Parameter]
+    public Action<Style> AddStyle { get; set; }
+
+    private Guid _selectedStyle;
+
+    public void Add()
+    {
+        Style? style = CssGenerator.Styles.Find(s => s.Id == _selectedStyle);
+        if (style is not null)
+        {
+            AddStyle?.Invoke(style);
+        }
+    }
+}

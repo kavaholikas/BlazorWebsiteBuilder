@@ -1,0 +1,42 @@
+<div class="container">
+    <PanelContainer Header="Body">
+        <Panel>
+            @switch (Root.Type)
+            {
+                case NodeType.ContainerNode:
+                    <ContainerPanel Root=@((ContainerNode)Root) SelectNode="SelectNode" GenerateHTML="GenerateHTML"/>
+                    break;
+                case NodeType.TextNode:
+                    <TextPanel Root=@((TextNode)Root) GenerateHTML="GenerateHTML"/>
+                    break;
+                case NodeType.SelfClosingNode:
+                    <SelfClosingPanel Root=@((SelfClosingNode)Root) GenerateHTML="GenerateHTML"/>
+                    break;
+                default:
+                    <h1>Error: Unknow Node Type</h1>
+                    break;
+            }
+
+            @if (Root.Parent is not null)
+            {
+                <button @onclick=@(() => SelectNode?.Invoke(Root.Parent)) class="fg-button">Back</button>
+            }
+        </Panel>
+    </PanelContainer>
+    <PanelContainer Header="Attributes">
+        <Panel>
+            <AttributePanel Root="Root" GenerateHTML="GenerateHTML"/>
+        </Panel>
+    </PanelContainer>
+</div>
+
+@code {
+    [Parameter]
+    public Node Root { get; set; }
+
+    [Parameter]
+    public Action<Node> SelectNode { get; set; }
+
+    [Parameter]
+    public Action GenerateHTML { get; set; }
+}

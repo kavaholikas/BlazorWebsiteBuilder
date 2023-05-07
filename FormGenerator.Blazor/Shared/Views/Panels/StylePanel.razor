@@ -1,0 +1,31 @@
+@inject Generator Generator
+
+<ul class="max-height-200">
+    @foreach (Style style in Root.Styles)
+    {
+        <ActiveStyleControl Style="style" RemoveStyleFromActive="RemoveStyleFromActive"/>
+    }
+
+</ul>
+
+<AddActiveStyleControl CssGenerator="Generator.CssGenerator" AddStyle="AddStyleToActive"/>
+
+@code {
+    [Parameter]
+    public Node Root { get; set; }
+
+    [Parameter]
+    public Action GenerateHTML { get; set; }
+
+    public void AddStyleToActive(Style style)
+    {
+        Root.AddStyle(style);
+        GenerateHTML?.Invoke();
+    }
+
+    public void RemoveStyleFromActive(Guid id)
+    {
+        Root.RemoveStyle(id);
+        GenerateHTML?.Invoke();
+    }
+}
